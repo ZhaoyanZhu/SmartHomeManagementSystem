@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <form action="/registerAuth" method="POST">
+        User Name
+        <input name="Username" required>
+        <br>
+        Password
+        <input type="password" name="Password" required>
+        <br>
+        First Name
+        <input name="fName" required>
+        <br>
+        Last Name
+        <input name="lName" required>
+        <br>
+        <br>
+        Billing Address:
+        <br>
+        Address Line 1
+        <input name="bstreet" required>
+        <br>
+        Address Line 2
+        <input name="bapt">
+        <br>
+        City
+        <input name="bcity" required>
+        <br>
+        State
+        <input name="bstate" required>
+        <br>
+        Country
+        <input name="bcountry" required>
+        <br>
+        Zip Code
+        <input name="bzip" required>
+        <br>
+        <br>
+        <input type="submit" value="Register">
+        {% if error %}
+        <p><strong>Error:</strong></p>
+        {{error}}
+        {% endif %}
+    </form>
+    <a href="/">Go Back</a>
+</body>
+</html>

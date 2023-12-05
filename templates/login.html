@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Welcome To Smart Home Energy Management System</h1>
+    <form action="/loginAuth" method="POST">
+        User Name
+        <input name="Username" required>
+        <br>
+        Password
+        <input type="password" name="Password" required>
+        <br>
+        <input type="submit" value="Login">
+        {% if error %}
+        <p><strong>Error:</strong></p>
+        {{error}}
+        {% endif %}
+    </form>
+    <a href="/register">Register</a>
+</body>
+</html>
+    

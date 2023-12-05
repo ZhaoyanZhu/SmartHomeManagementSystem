@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>View My Device By Location</title>
+</head>
+<style type="text/css">table,th,td{border: 1px solid black;}</style>
+<body>
+    <p>Your Service Locations:</p>
+    <table>
+        <tr>
+            <th>Location ID</th>
+            <th>Street</th>
+            <th>Apartment</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Zip Code</th>
+            <th>Took Date</th>
+            <th>Square Footage</th>
+            <th>Bedrooms</th>
+            <th>Occupants</th>
+        </tr>
+        {% for line in data %}
+        <tr>
+            <td>{{line["lID"]}}</td>
+            <td>{{line["lstreet"]}}</td>
+            <td>{{line["lapt"]}}</td>
+            <td>{{line["lcity"]}}</td>
+            <td>{{line["lstate"]}}</td>
+            <td>{{line["lcountry"]}}</td>
+            <td>{{line["lzip"]}}</td>
+            <td>{{line["took_date"]}}</td>
+            <td>{{line["square_footage"]}}</td>
+            <td>{{line["bedrooms"]}}</td>
+            <td>{{line["occupants"]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+    <p>Choose Your Service Location To View Its Enrolled Devices:</p>
+    <form action="/selectLocation" method="POST">
+        Location ID:
+        <input name="lID" required>
+        <br><br>
+        <input type="submit" value="View">
+    </form>
+    
+    <br><br>
+    <a href="/home">Go Back</a>
+</body>
+</html>

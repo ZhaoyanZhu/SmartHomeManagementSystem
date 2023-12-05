@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>If Run Overnight</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h3>What If I Use My Devices During Overnight?</h3>
+    The Energy Price During Midnight Is Usually Cheaper Than During Day Time For Most Places 
+    <br>
+    For Each Type Of Device, You Can View What The Energy Cost Would Be If You Used It During Midnight
+    <br><br>
+    Enter Month, Year And Your Location ID:
+    <br><br>
+    <form action="/viewSaving_EXCE" method="POST">
+        Month:
+        <input type="number" name="month" step="1" required>
+        <br>
+        Year:
+        <input type="number" name="year" step="1" required>
+        <br><br>
+        <input type="submit" value="view">
+    </form>
+    <br><br>
+    {% if year and month %}
+    <p>Your Energy Cost And Your Estimated Midnight Energy Cost During {{year}}-{{month}}</p>
+    {% endif %}
+    <canvas id="compare" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("compare").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"line",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Your Energy Cost",
+                    data:{{values|safe}},
+                    borderColor:"blue"
+                },
+                {
+                    label:"Estimated Midnight Energy Cost",
+                    data:{{values1|safe}},
+                    borderColor:"pink"
+                }
+                ]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    Difference Between Your Actual Cost And Estimated Midnight Cost:
+    <canvas id="saving" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("saving").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Savings",
+                    data:{{values2|safe}},
+                }]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    <a href="/home">Go Back</a>
+</body>
+</html>

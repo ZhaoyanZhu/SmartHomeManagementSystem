@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Daily Energy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    Enter the Month and Year to View Daily Energy Information:
+    <br><br>
+    <form action="/viewDailyEnergy_EXCE" method="POST">
+        Month:
+        <input type="number" name="month" step="1" required>
+        <br>
+        Year:
+        <input type="number" name="year" step="1" required>
+        <br><br>
+        <input type="submit" value="view">
+    </form>
+    <br><br>
+    {% if year and month %}
+    <p>Daily Energy Consumption In KWh For All My Locations During {{year}}-{{month}}</p>
+    {% endif %}
+    <canvas id="consumption" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("consumption").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"line",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Daily Energy Consumption",
+                    data:{{values|safe}},
+                    fill:false,
+                    lineTension:0.1,
+                    borderColor:"blue"
+                }]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    {% if year and month %}
+    <p>Daily Energy Cost In USD For All My Locations During {{year}}-{{month}}</p>
+    {% endif %}
+    <canvas id="cost" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("cost").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"line",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Daily Energy Cost",
+                    data:{{values1|safe}},
+                    fill:false,
+                    lineTension:0.2,
+                    borderColor:"orange"
+                }]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    <a href="/home">Go Back</a>
+</body>
+</html>

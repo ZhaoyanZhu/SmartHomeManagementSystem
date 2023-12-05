@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Compare Between Location</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h3>Compare the Energy Consumption Between Your Locations and Other Area-Similar Locations:</h3>
+    Enter Month and Year to view the comparsion:
+    <br><br>
+    <form action="/compareEnergyBetweenLocation_EXCE" method="POST">
+        Month:
+        <input type="number" name="month" step="1" required>
+        <br>
+        Year:
+        <input type="number" name="year" step="1" required>
+        <br><br>
+        <input type="submit" value="view">
+    </form>
+    <br><br>
+    {% if year and month %}
+    <p>Ratio Of Your Energy Consumption To Other Area-Similar Locations During {{year}}-{{month}}</p>
+    {% endif %}
+    <canvas id="compare" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("compare").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Ratio of Your Location To Other Area-Similar Locations",
+                    data:{{values|safe}},
+                }]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    <a href="/home">Go Back</a>
+</body>
+</html>

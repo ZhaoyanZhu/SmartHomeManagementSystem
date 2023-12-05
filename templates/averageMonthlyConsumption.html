@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Average Energy</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    Enter the Month and Year to View Average Monthly Energy Cost For Each Device Type:
+    <br><br>
+    <form action="/AverageMonthlyConsumptionPerType_EXCE" method="POST">
+        Month:
+        <input type="number" name="month" step="1" required>
+        <br>
+        Year:
+        <input type="number" name="year" step="1" required>
+        <br><br>
+        <input type="submit" value="view">
+    </form>
+    <br><br>
+    {% if year and month %}
+    <p>Average Monthly Energy Cost Per Device Type For All My Locations During {{year}}-{{month}}</p>
+    {% endif %}
+    <canvas id="average" width="450" height="200"></canvas>
+    <script>
+        var ctx=document.getElementById("average").getContext("2d");
+        var myChart=new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels:{{labels|safe}},
+                datasets:[{
+                    label:"Average Monthly Cost In USD For Each Device Type",
+                    data:{{values|safe}},
+                }]
+            },
+            options:{
+                responsive:false,
+            }
+        });
+    </script>
+    <br><br>
+    <a href="/home">Go Back</a>
+</body>
+</html>
