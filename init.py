@@ -8,7 +8,7 @@ conn=pymysql.connect(
     host="localhost",
     user="root",
     password="",
-    db="shems",
+    db="schems1",
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor
 )
@@ -191,8 +191,8 @@ def viewDevice():
     cursor=conn.cursor()
     query="SELECT eID, type, model_name\
             FROM enrolldevice NATURAL JOIN customerlocation \
-            WHERE cID=%s and lID=%s"
-    cursor.execute(query,(username,lID))
+            WHERE cID=%s and lID=%s and status=%s"
+    cursor.execute(query,(username,lID,'activate'))
     data=cursor.fetchall()
     cursor.close()
     return render_template("viewDevice.html",data=data,lID=lID)
@@ -231,8 +231,8 @@ def enrollDevice():
     query="SELECT clID FROM customerlocation WHERE cID=%s and lID=%s"
     cursor.execute(query,(username,lID))
     clID=cursor.fetchone()["clID"]
-    query="INSERT INTO enrolldevice(clID,type,model_name) VALUES(%s,%s,%s)"
-    cursor.execute(query,(clID,type,model_name))
+    query="INSERT INTO enrolldevice(clID,type,model_name,status) VALUES(%s,%s,%s,%s)"
+    cursor.execute(query,(clID,type,model_name,'activate'))
     conn.commit()
     cursor.close()
     return redirect("/viewDevice")
@@ -245,14 +245,14 @@ def deleteEnrollment():
     cursor=conn.cursor()
     query="SELECT * \
             FROM enrolldevice NATURAL JOIN customerlocation \
-            WHERE eID=%s and cID=%s and lID=%s"
-    cursor.execute(query,(eID,username,lID))
+            WHERE eID=%s and cID=%s and lID=%s and status=%s"
+    cursor.execute(query,(eID,username,lID,'activate'))
     data=cursor.fetchone()
     if not data:
         cursor.close()
         return render_template("deleteDeviceError.html")
-    query="DELETE FROM enrolldevice WHERE eID=%s"
-    cursor.execute(query,(eID))
+    query="UPDATE enrolldevice SET status=%s WHERE eID=%s"
+    cursor.execute(query,('deactivate',eID))
     conn.commit()
     cursor.close()
     return redirect("/viewDevice")
@@ -339,7 +339,7 @@ def compareEnergyBetweenLocation_EXCE():
     cursor=conn.cursor()
     query="CREATE VIEW LocationTotalConsumption(lID,square_footage,total_consumption) AS \
             SELECT lID, square_footage, SUM(value) as total_consumption\
-            FROM data NATRUAL JOIN enrolldevice NATURAL JOIN customerlocation NATURAL JOIN servicelocation \
+            FROM data NATURAL JOIN enrolldevice NATURAL JOIN customerlocation NATURAL JOIN servicelocation \
             WHERE label=%s and YEAR(date_time)=%s and MONTH(date_time)=%s \
             GROUP BY lID, square_footage"
     cursor.execute(query,('energy use',year,month))
